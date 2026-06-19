@@ -1,36 +1,37 @@
 import { useState } from 'react';
+import Papa from 'papaparse';
 import UploadPage from './components/UploadPage';
 import ResultsPage from './components/ResultsPage';
-import type { ValidationResult } from './types';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
+import type { ValidationResult, TransactionRow } from './types';
+import { processCSVData } from './lib/validator';
 
 function App() {
   const [currentStep, setCurrentStep] = useState<'upload' | 'results'>('upload');
   const [isProcessing, setIsProcessing] = useState(false);
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
+  const [validRows, setValidRows] = useState<TransactionRow[]>([]);
+  const [invalidRows, setInvalidRows] = useState<TransactionRow[]>([]);
 
   const handleProcessFile = async (file: File) => {
     setIsProcessing(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch(`${API_BASE}/api/upload`, {
-        method: 'POST',
-        body: formData,
+      // Parse CSV entirely in the browser
+      const rawRows = await new Promise<TransactionRow[]>((resolve, reject) => {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: 'greedy',
+          complete: (results) => resolve(results.data as TransactionRow[]),
+          error: (error) => reject(error),
+        });
       });
 
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.detail || 'Failed to process file on the server.');
-      }
+      // Run validation client-side
+      const { validationResult: result, validRows: valid, invalidRows: invalid } = processCSVData(rawRows);
 
-      const result: ValidationResult = await response.json();
       setValidationResult(result);
+      setValidRows(valid);
+      setInvalidRows(invalid);
       setCurrentStep('results');
-      
     } catch (error: any) {
       console.error('Failed to parse file:', error);
       alert(error.message || 'Failed to parse the uploaded file. Please make sure it is a valid CSV.');
@@ -39,20 +40,35 @@ function App() {
     }
   };
 
-  const handleDownloadCleaned = () => {
-    if (validationResult) {
-       window.location.href = `${API_BASE}/api/download/cleaned/${validationResult.session_id}`;
+  const downloadCSV = (data: TransactionRow[], filename: string) => {
+    if (data.length === 0) {
+      alert('No data to download.');
+      return;
     }
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadCleaned = () => {
+    downloadCSV(validRows, 'cleaned_transactions.csv');
   };
 
   const handleDownloadErrors = () => {
-    if (validationResult) {
-       window.location.href = `${API_BASE}/api/download/errors/${validationResult.session_id}`;
-    }
+    downloadCSV(invalidRows, 'error_report.csv');
   };
 
   const handleReset = () => {
     setValidationResult(null);
+    setValidRows([]);
+    setInvalidRows([]);
     setCurrentStep('upload');
   };
 

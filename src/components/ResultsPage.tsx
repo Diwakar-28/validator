@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Download, Layers, ShieldCheck, AlertTriangle, Database } from 'lucide-react';
+import { Download, ShieldCheck, AlertTriangle, Database } from 'lucide-react';
 import type { ValidationResult } from '../types';
 
 interface ResultsPageProps {
