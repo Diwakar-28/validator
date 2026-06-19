@@ -3,6 +3,8 @@ import UploadPage from './components/UploadPage';
 import ResultsPage from './components/ResultsPage';
 import type { ValidationResult } from './types';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 
 function App() {
   const [currentStep, setCurrentStep] = useState<'upload' | 'results'>('upload');
@@ -15,7 +17,7 @@ function App() {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('http://localhost:8000/api/upload', {
+      const response = await fetch(`${API_BASE}/api/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -39,13 +41,13 @@ function App() {
 
   const handleDownloadCleaned = () => {
     if (validationResult) {
-       window.location.href = `http://localhost:8000/api/download/cleaned/${validationResult.session_id}`;
+       window.location.href = `${API_BASE}/api/download/cleaned/${validationResult.session_id}`;
     }
   };
 
   const handleDownloadErrors = () => {
     if (validationResult) {
-       window.location.href = `http://localhost:8000/api/download/errors/${validationResult.session_id}`;
+       window.location.href = `${API_BASE}/api/download/errors/${validationResult.session_id}`;
     }
   };
 
