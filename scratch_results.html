@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraValidator | Validation Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#cf5cff",
+                    "surface-bright": "#3a393a",
+                    "on-primary-fixed": "#001f28",
+                    "on-primary-fixed-variant": "#004e60",
+                    "surface-tint": "#4cd6ff",
+                    "surface-container-highest": "#353436",
+                    "on-error": "#690005",
+                    "tertiary": "#39fb88",
+                    "surface": "#131314",
+                    "on-secondary-fixed": "#320047",
+                    "tertiary-fixed-dim": "#00e475",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#003918",
+                    "primary-fixed": "#b7eaff",
+                    "surface-container-high": "#2a2a2b",
+                    "background": "#131314",
+                    "surface-container-lowest": "#0e0e0f",
+                    "secondary-fixed-dim": "#ecb2ff",
+                    "on-secondary-fixed-variant": "#74009f",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "tertiary-container": "#00dd71",
+                    "on-surface-variant": "#bbc9cf",
+                    "on-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "tertiary-fixed": "#62ff96",
+                    "primary-container": "#00d1ff",
+                    "surface-variant": "#353436",
+                    "inverse-primary": "#00677f",
+                    "inverse-surface": "#e5e2e3",
+                    "inverse-on-surface": "#313031",
+                    "primary": "#a4e6ff",
+                    "outline": "#859399",
+                    "secondary-fixed": "#f8d8ff",
+                    "on-secondary": "#520071",
+                    "on-primary-container": "#00566a",
+                    "error": "#ffb4ab",
+                    "on-tertiary-container": "#005b2b",
+                    "surface-dim": "#131314",
+                    "on-tertiary-fixed": "#00210b",
+                    "on-tertiary-fixed-variant": "#005226",
+                    "surface-container-low": "#1c1b1c",
+                    "on-primary": "#003543",
+                    "surface-container": "#201f20",
+                    "on-secondary-container": "#480063",
+                    "on-background": "#e5e2e3",
+                    "secondary": "#ecb2ff",
+                    "outline-variant": "#3c494e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max-width": "1440px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "code-md": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-card {
+            background: rgba(32, 31, 32, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-primary { box-shadow: 0 0 20px rgba(164, 230, 255, 0.15); }
+        .glow-success { box-shadow: 0 0 25px rgba(57, 251, 136, 0.15); }
+        .glow-error { box-shadow: 0 0 25px rgba(255, 180, 171, 0.15); }
+
+        .btn-bloom:hover {
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.4);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(164, 230, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md min-h-screen flex flex-col">
+<!-- Header / TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-4 bg-surface/40 backdrop-blur-md border-b border-white/10 shadow-[0_0_20px_rgba(164,230,255,0.1)]">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">AuraValidator</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300" href="#">Dashboard</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300" href="#">History</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="history_edu">history_edu</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" data-alt="A sleek professional profile portrait of a financial technology specialist in a high-tech studio. Soft neon blue rim lighting illuminates the subject against a dark, minimalist tech background. The overall aesthetic is clean, sharp, and corporate futurist with deep blacks and vibrant cyan highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp3npYTyP8BjJGToU0yIiGWnQE-NGOs-Dcq8gSh781COc_H72s_DkkGiOWFmDvUIYr70dl8UY9SWfHp7zcPz_bkaQCmaOvgpkPDBTP9EqjqiWQlcbfRGdI-nxSY87pxu93e8a6SFnk4kK7apv07MmyoZX9dcNflV35EPZPEw5fRHvI_oosPcMey-d4JfFMLAldutNxjGsNgjGE-RPOWKIynJ2kf93ECHH2LlPvVrwqnx5C69cK34mlB4FaVBbhZXIfZi-z1AoXkbY"/>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-bold active:scale-95 transition-transform btn-bloom">
+                Validate Batch
+            </button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-28 pb-20 px-margin-desktop max-w-[1440px] mx-auto w-full relative">
+<!-- Background Atmospheric Element -->
+<div class="absolute top-40 left-1/2 -translate-x-1/2 w-full h-[500px] pointer-events-none overflow-hidden -z-10">
+
+</div>
+<!-- Page Heading -->
+<div class="mb-12">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Validation Analysis Complete</h1>
+<p class="text-on-surface-variant font-body-lg">The deep-scan heuristic engine has completed processing your financial batch.</p>
+</div>
+<!-- Summary Section: Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+<!-- Total Rows -->
+<div class="glass-card p-6 rounded-xl glow-primary flex flex-col justify-between group">
+<div class="flex justify-between items-start mb-8">
+<span class="font-label-sm text-label-sm text-primary tracking-widest uppercase">Total Rows Processed</span>
+<span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+</div>
+<div>
+<div class="text-[56px] font-extrabold leading-none text-on-surface mb-1 tracking-tight">1,248,502</div>
+<div class="flex items-center gap-1 text-tertiary text-sm font-medium">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+<span>12.5% vs last batch</span>
+</div>
+</div>
+</div>
+<!-- Valid Transactions -->
+<div class="glass-card p-6 rounded-xl glow-success border-tertiary/20 flex flex-col justify-between group">
+<div class="flex justify-between items-start mb-8">
+<span class="font-label-sm text-label-sm text-tertiary tracking-widest uppercase">Valid Transactions</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<div class="text-[56px] font-extrabold leading-none text-tertiary mb-1 tracking-tight">1,248,314</div>
+<div class="text-on-surface-variant text-sm font-medium">99.98% Accuracy Threshold</div>
+</div>
+</div>
+<!-- Validation Errors -->
+<div class="glass-card p-6 rounded-xl glow-error border-error/20 flex flex-col justify-between group">
+<div class="flex justify-between items-start mb-8">
+<span class="font-label-sm text-label-sm text-error tracking-widest uppercase">Validation Errors</span>
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<div class="text-[56px] font-extrabold leading-none text-error mb-1 tracking-tight">188</div>
+<div class="text-on-surface-variant text-sm font-medium">Requiring Manual Resolution</div>
+</div>
+</div>
+</div>
+<!-- Main Section: Error Log -->
+<div class="glass-card rounded-xl overflow-hidden mb-12 flex flex-col h-[520px]">
+<div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/2">
+<h2 class="font-headline-md text-headline-md flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="database">database</span>
+                    Error Log Analysis
+                </h2>
+<div class="flex gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search logs..." type="text"/>
+</div>
+<button class="material-symbols-outlined bg-surface-container-high p-2 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors" data-icon="filter_list">filter_list</button>
+</div>
+</div>
+<div class="flex-grow overflow-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container/80 backdrop-blur-md z-10">
+<tr>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant border-b border-white/5">Row #</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant border-b border-white/5">Field</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant border-b border-white/5">Value</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant border-b border-white/5">Issue Description</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant border-b border-white/5 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5 font-code-md text-code-md">
+<tr class="hover:bg-white/5 transition-colors cursor-pointer">
+<td class="px-6 py-4 text-primary">#14,502</td>
+<td class="px-6 py-4 text-on-surface">account_id</td>
+<td class="px-6 py-4 text-on-surface-variant">IBAN-990-22X</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Checksum Mismatch (EU-V4 Protocol)
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer bg-white/2">
+<td class="px-6 py-4 text-primary">#48,912</td>
+<td class="px-6 py-4 text-on-surface">timestamp</td>
+<td class="px-6 py-4 text-on-surface-variant">2024-02-30 14:22:01</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Invalid Date: Feb 30th Detection
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer">
+<td class="px-6 py-4 text-primary">#92,118</td>
+<td class="px-6 py-4 text-on-surface">amount_ccy</td>
+<td class="px-6 py-4 text-on-surface-variant">-450.00 BTC</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Negative Balance Violation
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer bg-white/2">
+<td class="px-6 py-4 text-primary">#102,400</td>
+<td class="px-6 py-4 text-on-surface">routing_key</td>
+<td class="px-6 py-4 text-on-surface-variant">SWIFT:ZZ-99</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Deprecated Node Identifier
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer">
+<td class="px-6 py-4 text-primary">#224,551</td>
+<td class="px-6 py-4 text-on-surface">user_agent</td>
+<td class="px-6 py-4 text-on-surface-variant">[NULL]</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Missing Required Metadata
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors cursor-pointer bg-white/2">
+<td class="px-6 py-4 text-primary">#550,112</td>
+<td class="px-6 py-4 text-on-surface">region_code</td>
+<td class="px-6 py-4 text-on-surface-variant">XY-000</td>
+<td class="px-6 py-4 text-error flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                Unrecognized Geographic Key
+                            </td>
+<td class="px-6 py-4 text-right">
+<span class="bg-error/10 text-error px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-white/5 text-center">
+<button class="text-primary font-medium hover:underline text-sm">View All 188 Errors</button>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex flex-col md:flex-row gap-gutter justify-center items-center">
+<button class="w-full md:w-auto px-10 py-5 bg-primary-container text-on-primary-container rounded-xl font-bold flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 btn-bloom group shadow-lg shadow-primary-container/10">
+<span class="material-symbols-outlined group-hover:animate-bounce" data-icon="download">download</span>
+                Download Cleaned Data (.CSV)
+            </button>
+<button class="w-full md:w-auto px-10 py-5 border border-primary text-primary rounded-xl font-bold flex items-center justify-center gap-3 transition-all hover:bg-primary/5 hover:scale-[1.02] active:scale-95 group">
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500" data-icon="layers">layers</span>
+                Download Split Chunks (.JSON)
+            </button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-base px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-white/5 mt-auto">
+<div class="mb-4 md:mb-0">
+<span class="font-headline-md text-headline-md text-on-surface">AuraValidator</span>
+<p class="text-on-surface-variant text-label-sm mt-1">© 2024 AuraValidator. Secure Financial Operations.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-label-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Security Protocol</a>
+<a class="text-label-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Compliance</a>
+<a class="text-label-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">API Docs</a>
+<a class="text-label-sm text-on-surface-variant hover:text-tertiary transition-colors" href="#">Privacy Policy</a>
+</div>
+</footer>
+<script>
+        // Micro-interactions for glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple table row hover highlighting via JS if needed for complex effects
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.add('fill-1');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.remove('fill-1');
+            });
+        });
+    </script>
+</body></html>

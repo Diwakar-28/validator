@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Upload Transactions | AuraValidator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-card {
+            background: rgba(19, 19, 20, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: "";
+            absolute: inset-0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+        }
+
+        .shadow-glow-primary {
+            box-shadow: 0 0 30px -10px rgba(164, 230, 255, 0.3);
+        }
+
+        .neon-border-dash {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23a4e6ff' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            border-radius: 12px;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 12px rgba(164, 230, 255, 0.5);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .upload-zone:hover .neon-border-dash {
+            filter: drop-shadow(0 0 8px rgba(164, 230, 255, 0.4));
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%2339fb88' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#00e475",
+                    "on-secondary": "#520071",
+                    "on-tertiary-fixed": "#00210b",
+                    "error-container": "#93000a",
+                    "surface-tint": "#4cd6ff",
+                    "surface-bright": "#3a393a",
+                    "on-tertiary-container": "#005b2b",
+                    "inverse-surface": "#e5e2e3",
+                    "on-secondary-fixed-variant": "#74009f",
+                    "surface-container-high": "#2a2a2b",
+                    "on-tertiary-fixed-variant": "#005226",
+                    "outline-variant": "#3c494e",
+                    "surface": "#131314",
+                    "on-tertiary": "#003918",
+                    "on-surface-variant": "#bbc9cf",
+                    "primary": "#a4e6ff",
+                    "outline": "#859399",
+                    "on-background": "#e5e2e3",
+                    "on-primary-fixed-variant": "#004e60",
+                    "secondary-fixed": "#f8d8ff",
+                    "on-primary-fixed": "#001f28",
+                    "on-error": "#690005",
+                    "on-surface": "#e5e2e3",
+                    "on-primary": "#003543",
+                    "primary-fixed": "#b7eaff",
+                    "primary-container": "#00d1ff",
+                    "surface-container-highest": "#353436",
+                    "tertiary": "#39fb88",
+                    "secondary-fixed-dim": "#ecb2ff",
+                    "inverse-primary": "#00677f",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-dim": "#131314",
+                    "on-secondary-fixed": "#320047",
+                    "on-secondary-container": "#480063",
+                    "secondary-container": "#cf5cff",
+                    "on-primary-container": "#00566a",
+                    "surface-variant": "#353436",
+                    "tertiary-container": "#00dd71",
+                    "tertiary-fixed": "#62ff96",
+                    "background": "#131314",
+                    "surface-container": "#201f20",
+                    "error": "#ffb4ab",
+                    "secondary": "#ecb2ff",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#1c1b1c",
+                    "primary-fixed-dim": "#4cd6ff",
+                    "inverse-on-surface": "#313031"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "base": "8px",
+                    "container-max-width": "1440px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "code-md": ["JetBrains Mono"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-3xl border-b border-white/10 shadow-glow dark:shadow-glow-primary">
+<div class="flex justify-between items-center px-gutter py-4 w-full max-w-container-max-width mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">AuraValidator</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-all duration-300 font-label-sm text-label-sm" href="#">Dashboard</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-sm text-label-sm" href="#">Upload</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-300 font-label-sm text-label-sm" href="#">History</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-300 font-label-sm text-label-sm" href="#">Validators</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all duration-300">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all duration-300">settings</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A professional analyst profile picture with sleek lighting, neon blue backlighting, against a dark high-tech background. The subject is wearing modern professional attire, conveying expertise and precision in a futuristic fintech office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI9kKF_EY7rITdI5Zdz6dFdOw8P5kn_3a5aiPE-Cs5TznVWB70o7KHE41SkU_NgAZ8TXyfSRZxlHyNbK36daU_0uftGxUzHjxikTqTrJRUPbsCeAeAlvwyODIVSAvG8HOxSYwb1FxceGeUOshaDwQGz82osfT3zNX0YfJJAFpauXSwSEUE1EboTimE364vBEMwjGmV4CfrIjIhaUXqog_Se_xk1to79t9idi_PK81_lFwdFW7_55K2dkTvsMtA-hkD5ADsEJ6lXgU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow pt-32 pb-20 px-gutter w-full max-w-container-max-width mx-auto">
+<!-- Hero Section: Upload Zone -->
+<section class="mb-12">
+<div class="text-center mb-10">
+<h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-primary mb-4 glow-text">Upload Transaction Flux</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mx-auto">Seamlessly inject high-stakes financial datasets into our validation engine for real-time compliance auditing.</p>
+</div>
+<div class="upload-zone group cursor-pointer relative max-w-4xl mx-auto h-[400px] flex flex-col items-center justify-center glass-card rounded-xl p-8 transition-all duration-500 hover:bg-surface/60">
+<div class="neon-border-dash absolute inset-2 transition-all duration-500"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="mb-6 bg-primary/10 p-6 rounded-full border border-primary/20 animate-float">
+<span class="material-symbols-outlined text-6xl text-primary" style="font-variation-settings: 'FILL' 1;">csv</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Drag &amp; Drop Dataset</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mb-8">Support for high-density .CSV and .JSON formats (Up to 2GB)</p>
+<button class="px-8 py-4 bg-primary text-on-primary font-headline-md text-body-md rounded-lg shadow-glow-primary hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 group-hover:shadow-[0_0_20px_rgba(164,230,255,0.6)]">
+<span class="material-symbols-outlined">upload_file</span>
+                        Browse Files
+                    </button>
+</div>
+<!-- Background Decorative Element -->
+<div class="absolute bottom-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[160px] text-primary">security</span>
+</div>
+</div>
+</section>
+<!-- Validation Standards Section -->
+<section class="mb-16">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-tertiary">verified_user</span>
+<h2 class="text-headline-md font-headline-md text-on-surface">Validation Standards</h2>
+</div>
+<div class="glass-card rounded-xl p-gutter">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Standard Card 1 -->
+<div class="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-colors">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-[20px]">call</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">PHONE FORMATS</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center bg-surface-container-low p-2 rounded">
+<span class="text-code-md font-code-md text-tertiary">India</span>
+<span class="text-code-md font-code-md text-on-surface">10 Digits</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container-low p-2 rounded">
+<span class="text-code-md font-code-md text-tertiary">Singapore</span>
+<span class="text-code-md font-code-md text-on-surface">8 Digits</span>
+</div>
+</div>
+</div>
+<!-- Standard Card 2 -->
+<div class="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-colors">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">TEMPORAL MAPPING</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center bg-surface-container-low p-2 rounded">
+<span class="text-code-md font-code-md text-tertiary">Date</span>
+<span class="text-code-md font-code-md text-on-surface">YYYY-MM-DD</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container-low p-2 rounded">
+<span class="text-code-md font-code-md text-tertiary">Time</span>
+<span class="text-code-md font-code-md text-on-surface">HH:mm:ss</span>
+</div>
+</div>
+</div>
+<!-- Standard Card 3 -->
+<div class="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-colors lg:col-span-2">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-[20px]">payments</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">AUTHORIZED PAYMENT MODES</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-white/10 text-code-md font-code-md text-on-surface">UPI</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-white/10 text-code-md font-code-md text-on-surface">CARD</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-white/10 text-code-md font-code-md text-on-surface">NETBANKING</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-white/10 text-code-md font-code-md text-on-surface">COD</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full border border-white/10 text-code-md font-code-md text-on-surface">WALLET</span>
+</div>
+<p class="mt-3 text-label-sm font-label-sm text-on-surface-variant/60 italic">*Case-insensitive matching enabled</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final Action -->
+<div class="flex flex-col items-center justify-center mt-12 gap-4">
+<button class="relative overflow-hidden group px-12 py-5 bg-primary text-on-primary font-headline-md text-headline-md rounded-xl shadow-glow-primary hover:scale-105 active:scale-95 transition-all duration-300" id="process-btn">
+<span class="relative z-10 flex items-center gap-3">
+                    Process Transaction Data
+                    <span class="material-symbols-outlined animate-pulse">rocket_launch</span>
+</span>
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+</button>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-tertiary">
+<span class="material-symbols-outlined text-sm">shield</span>
+                End-to-End Encrypted Verification Active
+            </div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-surface-container-lowest border-t border-white/5">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-base w-full max-w-container-max-width mx-auto">
+<div class="flex items-center gap-4 mb-4 md:mb-0">
+<span class="text-label-sm font-label-sm font-black text-on-surface-variant">© 2024 AuraValidator. High-Stakes Fintech Security.</span>
+</div>
+<div class="flex gap-6">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors" href="#">Documentation</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors" href="#">Support</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors" href="#">API Status</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for the process button
+        const processBtn = document.getElementById('process-btn');
+        processBtn.addEventListener('click', () => {
+            const originalText = processBtn.innerHTML;
+            processBtn.disabled = true;
+            processBtn.innerHTML = `
+                <span class="relative z-10 flex items-center gap-3">
+                    Initializing Core Engine...
+                    <svg class="animate-spin h-6 w-6 text-on-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </span>
+            `;
+            
+            setTimeout(() => {
+                processBtn.innerHTML = `
+                    <span class="relative z-10 flex items-center gap-3">
+                        Scanning Clusters...
+                        <span class="material-symbols-outlined animate-bounce">radar</span>
+                    </span>
+                `;
+            }, 1500);
+
+            setTimeout(() => {
+                processBtn.innerHTML = originalText;
+                processBtn.disabled = false;
+                alert('Validation process initialized. Check History tab for real-time logs.');
+            }, 3500);
+        });
+
+        // Simple parallax-like movement for upload icon
+        const uploadZone = document.querySelector('.upload-zone');
+        const icon = uploadZone.querySelector('.animate-float');
+        
+        uploadZone.addEventListener('mousemove', (e) => {
+            const rect = uploadZone.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            
+            icon.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+        });
+
+        uploadZone.addEventListener('mouseleave', () => {
+            icon.style.transform = `translate(0, 0)`;
+        });
+    </script>
+</body></html>

@@ -1,0 +1,9 @@
+order_id,customer_name,phone_number,country_code,email,payment_mode,order_date,amount
+ORD001,John Doe,9876543210,IN,johndoe@example.com,UPI,2023-10-01,150.50
+ORD002,Alice Smith,12345678,SG,alice.s@example.com,Card,01-10-2023,200.00
+ORD003,Bob Johnson,98765,IN,bob@example,NetBanking,2023-13-45,-50
+ORD004,Charlie Brown,88888888,SG,,Cash,2023-10-02,0
+ORD005,,1234567890,IN,missing.name@test.com,Wallet,2023-10-03,300
+ORD001,Duplicate John,9876543210,IN,dup@example.com,UPI,2023-10-01,150.50
+ORD006,Eve Adams,invalid,US,eve@example.com,Crypto,2023-10-04,abc
+ORD007,Valid User,9999999999,IN,valid@example.com,Card,2023-10-05,99.99
